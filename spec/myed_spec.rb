@@ -2,10 +2,13 @@ def myed(commands)
   if (commands[-1] == ",p")
     return commands[1...-2]
   end
-  address_start, address_end = commands[-1][0...-1].split(",")
+  commands[parse_address(commands[-1][0...-1])]
+end
+def parse_address(range)
+  address_start, address_end = range.split(",")
   address_start = [1, address_start.to_i].max
   address_end ||= address_start
-  commands[(address_start.to_i)..(address_end.to_i)]
+  (address_start.to_i)..(address_end.to_i)
 end
 RSpec.describe 'myed' do
   it 'inserting hello' do

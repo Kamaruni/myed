@@ -8,7 +8,7 @@ RSpec.describe 'myed' do
 end
 def call_ed(commands)
   IO.popen('ed', 'r+') do |ed|
-    ed.write(commands.join("\n") + "\n")
-    ed.gets
+    ed.write(commands.join("\n") + "\nQ\n")
+    ed.read
   end
 end

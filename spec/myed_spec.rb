@@ -50,6 +50,12 @@ RSpec.describe 'myed' do
     command = ["i", "1", "2", "3", "4", ".", "2,p"]
     verify(command)
   end
+  it 'prints current line, 1 initially' do
+    verify(["i", "a", ".", "p"])
+  end
+  it 'jumps to line 1' do
+    verify(["i", "a", "b", ".", "1"])
+  end
 end
 def verify(commands)
   expect(myed(commands)).to eq(call_ed(commands))

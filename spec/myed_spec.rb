@@ -7,19 +7,19 @@ end
 RSpec.describe 'myed' do
   it 'inserting hello' do
     command = ["i", "hello", ".", ",p"]
-    expect(myed(command)).to eq(call_ed(command))
+    verify(command)
   end
   it 'inserting codefreeze' do
     command = ["i", "codefreeze", ".", ",p"]
-    expect(myed(command)).to eq(call_ed(command))
+    verify(command)
   end
   it 'inserting codefreeze twice on two lines' do
     command = ["i", "codefreeze", "codefreeze", ".", ",p"]
-    expect(myed(command)).to eq(call_ed(command))
+    verify(command)
   end
   it 'printing a specific line by number' do
     command = ["i", "hello", "codefreeze", ".", "2p"]
-    expect(myed(command)).to eq(call_ed(command))
+    verify(command)
   end
 end
 def verify(commands)

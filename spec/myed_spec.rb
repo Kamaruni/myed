@@ -1,5 +1,5 @@
 def myed(commands)
-  commands[1...-2].map { |line| line + "\n" }
+  commands[1...-2]
 end
 RSpec.describe 'myed' do
   it 'inserting hello' do
@@ -18,6 +18,6 @@ end
 def call_ed(commands)
   IO.popen('ed', 'r+') do |ed|
     ed.write(commands.join("\n") + "\nQ\n")
-    ed.readlines
+    ed.readlines.map { |line| line.chomp }
   end
 end

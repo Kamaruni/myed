@@ -2,8 +2,9 @@ def myed(commands)
   if (commands[-1] == ",p")
     return commands[1...-2]
   end
-  current_address = commands[-1][0...-1].to_i
-  commands[current_address..current_address]
+  address_start, address_end = commands[-1][0...-1].split(",")
+  address_end ||= address_start
+  commands[(address_start.to_i)..(address_end.to_i)]
 end
 RSpec.describe 'myed' do
   it 'inserting hello' do
@@ -28,6 +29,10 @@ RSpec.describe 'myed' do
   end
   it 'prints line 10' do
     command = ["i", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", ".", "10p"]
+    verify(command)
+  end
+  it 'print bounded range of lines' do
+    command = ["i", "1", "2", "3", "4", ".", "2,3p"]
     verify(command)
   end
 end

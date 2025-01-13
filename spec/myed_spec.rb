@@ -46,6 +46,10 @@ RSpec.describe 'myed' do
     command = ["i", "1", "2", "3", "4", ".", "2,$p"]
     verify(command)
   end
+  it 'print single line on no explicit end' do
+    command = ["i", "1", "2", "3", "4", ".", "2,p"]
+    verify(command)
+  end
 end
 def verify(commands)
   expect(myed(commands)).to eq(call_ed(commands))

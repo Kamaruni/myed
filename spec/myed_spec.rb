@@ -2,8 +2,8 @@ def myed(commands)
   if (commands[-1] == ",p")
     return commands[1...-2]
   end
-  line_no = commands[-1][0...-1].to_i
-  commands[line_no..line_no]
+  current_address = commands[-1][0...-1].to_i
+  commands[current_address..current_address]
 end
 RSpec.describe 'myed' do
   it 'inserting hello' do

@@ -22,6 +22,9 @@ RSpec.describe 'myed' do
     expect(myed(command)).to eq(call_ed(command))
   end
 end
+def verify(commands)
+  expect(myed(commands)).to eq(call_ed(commands))
+end
 def call_ed(commands)
   IO.popen('ed', 'r+') do |ed|
     ed.write(commands.join("\n") + "\nQ\n")

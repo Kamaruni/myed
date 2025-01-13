@@ -1,8 +1,9 @@
 def myed(commands)
-  if (commands[-1] == "2p")
-    return commands[2..2]
+  if (commands[-1] == ",p")
+    return commands[1...-2]
   end
-  commands[1...-2]
+  line_no = commands[-1][0...-1].to_i
+  commands[line_no..line_no]
 end
 RSpec.describe 'myed' do
   it 'inserting hello' do
@@ -19,6 +20,10 @@ RSpec.describe 'myed' do
   end
   it 'printing a specific line by number' do
     command = ["i", "hello", "codefreeze", ".", "2p"]
+    verify(command)
+  end
+  it 'printing the first line' do
+    command = ["i", "hello", "codefreeze", ".", "1p"]
     verify(command)
   end
 end

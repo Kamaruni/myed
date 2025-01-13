@@ -1,5 +1,5 @@
 def myed(commands)
-  [commands[1] + "\n"]
+  commands[1...-2].map { |line| line + "\n" }
 end
 RSpec.describe 'myed' do
   it 'something' do
@@ -14,6 +14,10 @@ RSpec.describe 'myed' do
   end
   it 'inserting codefreeze' do
     command = ["i", "codefreeze", ".", ",p"]
+    expect(myed(command)).to eq(call_ed(command))
+  end
+  it 'inserting codefreeze twice on two lines' do
+    command = ["i", "codefreeze", "codefreeze", ".", ",p"]
     expect(myed(command)).to eq(call_ed(command))
   end
 end

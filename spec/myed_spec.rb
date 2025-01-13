@@ -1,12 +1,13 @@
 def myed(commands)
-  commands[parse_address(commands[-1][0...-1])]
+  buffer = commands[1..-3]
+  buffer[parse_address(commands[-1][0...-1])]
 end
 def parse_address(range)
-  return 1..-3 if range == ","
+  return 0..-1 if range == ","
   address_start, address_end = range.split(",")
   address_start = [1, address_start.to_i].max
   address_end ||= address_start
-  (address_start.to_i)..(address_end.to_i)
+  (address_start.to_i() -1)..(address_end.to_i() -1)
 end
 RSpec.describe 'myed' do
   it 'inserting hello' do
@@ -39,6 +40,10 @@ RSpec.describe 'myed' do
   end
   it 'print range with unbounded start' do
     command = ["i", "1", "2", "3", "4", ".", ",3p"]
+    verify(command)
+  end
+  it 'print unbounded end' do
+    command = ["i", "1", "2", "3", "4", ".", "2,$p"]
     verify(command)
   end
 end

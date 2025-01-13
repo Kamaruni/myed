@@ -26,6 +26,10 @@ RSpec.describe 'myed' do
     command = ["i", "hello", "codefreeze", ".", "1p"]
     verify(command)
   end
+  it 'prints line 10' do
+    command = ["i", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", ".", "10p"]
+    verify(command)
+  end
 end
 def verify(commands)
   expect(myed(commands)).to eq(call_ed(commands))

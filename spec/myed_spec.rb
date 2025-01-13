@@ -3,9 +3,8 @@ RSpec.describe 'myed' do
     expect(false).to eq(false)
   end
   it 'calling ed from ruby' do
-    IO.popen('ed', 'r+') do |ed|
-    ed.write("i\nhello\n.\n,p\nq\n")
+    ed = IO.popen('ed', 'r+')
+    ed.write("i\nhello\n.\n,p\n")
     expect(ed.gets).to eq("hello\n")
-    end
   end
 end

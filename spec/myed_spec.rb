@@ -1,6 +1,19 @@
-def myed(commands)
-  buffer = commands[1..-3]
-  buffer[parse_address(commands[-1][0...-1])]
+def myed(c)
+  buffer = c[1..-3]
+  commands = c[-1..-1]
+  current_command = commands[0]
+  if current_command.match? /^d+$/
+    jump_to_line current_command
+  else
+    print_lines(current_command, buffer)
+  end
+end
+def jump_to_line(command, buffer)
+  line_number = command.to_i() - 1
+  buffer[line_number..line_number]
+end
+def print_lines(command, buffer)
+    buffer[parse_address(command[0...-1])]
 end
 def parse_address(range)
   return 0..-1 if range == ","
@@ -10,6 +23,9 @@ def parse_address(range)
   (address_start.to_i() -1)..(address_end.to_i() -1)
 end
 RSpec.describe 'myed' do
+  xit 'jumps to line 2' do
+    verify(["i", "a", "b", ".", "2"])
+  end
   it 'inserting hello' do
     command = ["i", "hello", ".", ",p"]
     verify(command)

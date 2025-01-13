@@ -3,6 +3,7 @@ def myed(commands)
     return commands[1...-2]
   end
   address_start, address_end = commands[-1][0...-1].split(",")
+  address_start = [1, address_start.to_i].max
   address_end ||= address_start
   commands[(address_start.to_i)..(address_end.to_i)]
 end
@@ -33,6 +34,10 @@ RSpec.describe 'myed' do
   end
   it 'print bounded range of lines' do
     command = ["i", "1", "2", "3", "4", ".", "2,3p"]
+    verify(command)
+  end
+  it 'print range with unbounded start' do
+    command = ["i", "1", "2", "3", "4", ".", ",3p"]
     verify(command)
   end
 end

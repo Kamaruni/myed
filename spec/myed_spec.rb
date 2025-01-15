@@ -119,6 +119,9 @@ RSpec.describe 'myed' do
   it 'writes in two separate insert sessions' do
     verify(["i", "one", ".", "i", "two", ".", ",p"])
   end
+  it 'write in three separate insert sessions' do
+    verify(["i", "one", ".", "i", "two", ".", "i", "three", ".", "2p"])
+  end
 end
 def verify(commands)
   expect(myed(commands)).to eq(call_ed(commands))

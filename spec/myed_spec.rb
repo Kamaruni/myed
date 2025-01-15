@@ -31,14 +31,13 @@ class MyEd
   def execute_modifying_command(command)
       if command == "."
     if @mode == :change
-      @buffer[0] = "hi"
+      @buffer[@current_line] = @modifying_buffer.first
         @mode = :command
       return []
     end
       @mode = :command
         @buffer = @buffer[0...@current_line] + @modifying_buffer + (@buffer[@current_line..-1] || [])
         @current_line = @modifying_buffer.size - 1 if @current_line == -1
-        @current_line = @modifying_buffer.size -1 if @current_line == -1
       else
         @modifying_buffer.append(command)
       end
@@ -161,6 +160,9 @@ RSpec.describe 'myed' do
   end
   it 'change first line' do
     verify(["i", "hello", "world", ".", "1", "c", "hi", ".", ",p"])
+  end
+  it 'changes the second line' do
+    verify(["i", "hello", "world", ".", "c", "steve", ".", ",n"])
   end
 end
 def verify(commands)

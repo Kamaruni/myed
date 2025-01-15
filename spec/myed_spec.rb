@@ -36,10 +36,11 @@ class MyEd
       return []
     end
       @mode = :command
-        @buffer = @buffer[0...@current_line] + @insert_buffer + (@buffer[@current_line..-1] || [])
-        @current_line = @insert_buffer.size - 1 if @current_line == -1
+        @buffer = @buffer[0...@current_line] + @modifying_buffer + (@buffer[@current_line..-1] || [])
+        @current_line = @modifying_buffer.size - 1 if @current_line == -1
+        @current_line = @modifying_buffer.size -1 if @current_line == -1
       else
-        @insert_buffer.append(command)
+        @modifying_buffer.append(command)
       end
       []
     end
@@ -50,7 +51,7 @@ class MyEd
             when "c"
               :change
             end
-    @insert_buffer = []
+    @modifying_buffer = []
     []
   end
   def jump_to_line(command)

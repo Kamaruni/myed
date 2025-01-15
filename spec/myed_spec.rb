@@ -4,13 +4,29 @@ class MyEd
     @current_line = buffer.size - 1
   end
   def execute_command(current_command)
-    if current_command.match? /^\d+$/
+    if @mode == :insert
+      if current_command == "."
+        @mode = :command
+        @buffer = @insert_buffer + @buffer
+        @current_line = @insert_buffer.size - 1
+      else
+        @insert_buffer.append(current_command)
+      end
+      []
+    elsif current_command == "i"
+      self.enter_insert_mode()
+    elsif current_command.match? /^\d+$/
       self.jump_to_line(current_command)
     elsif current_command == "d"
       self.delete_line()
     else
       self.print_lines(current_command)
     end
+  end
+  def enter_insert_mode()
+    @mode = :insert
+    @insert_buffer = []
+    []
   end
   def jump_to_line(command)
     line_number = command.to_i() - 1
@@ -26,11 +42,9 @@ class MyEd
       @buffer[parse_address(command[0...-1], @current_line)]
   end
 end
-def myed(c)
-  dot = c.find_index(".")
-  buffer = c[1...dot]
+def myed(commands)
+  buffer = []
   myed = MyEd.new(buffer)
-  commands = c[(dot + 1)..-1]
   commands.flat_map do |current_command|
     myed.execute_command(current_command)
   end
@@ -101,6 +115,9 @@ RSpec.describe 'myed' do
   end
   it 'jumps to first line and deletes it' do
     verify(["i", "one", "two", ".", "1", "d", "1p"])
+  end
+  it 'writes in two separate insert sessions' do
+    verify(["i", "one", ".", "i", "two", ".", ",p"])
   end
 end
 def verify(commands)

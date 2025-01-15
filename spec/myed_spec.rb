@@ -35,16 +35,6 @@ def myed(c)
     end
   end
 end
-def delete_line(buffer, current_line)
-  buffer.delete_at(current_line[0])
-  current_line[0] = [buffer.size - 1, current_line[0]].min
-  []
-end
-def jump_to_line(command, buffer, current_line)
-  line_number = command.to_i() - 1
-  current_line[0] = line_number
-  buffer[line_number..line_number]
-end
 def print_lines(command, buffer, current_line)
     buffer[parse_address(command[0...-1], current_line)]
 end

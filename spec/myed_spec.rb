@@ -7,8 +7,8 @@ class MyEd
     if @mode == :insert
       if current_command == "."
         @mode = :command
-        @buffer = @insert_buffer + @buffer
-        @current_line = @insert_buffer.size - 1
+        @buffer = @buffer[0...@current_line] + @insert_buffer + (@buffer[@current_line..-1] || [])
+        @current_line = @insert_buffer.size - 1 if @current_line == -1
       else
         @insert_buffer.append(current_command)
       end
@@ -120,7 +120,10 @@ RSpec.describe 'myed' do
     verify(["i", "one", ".", "i", "two", ".", ",p"])
   end
   it 'write in three separate insert sessions' do
-    verify(["i", "one", ".", "i", "two", ".", "i", "three", ".", "2p"])
+    verify(["i", "one", ".", "i", "two", ".", "i", "three", ".", ",p"])
+  end
+  it 'inserts multiple lines in two separate insert sessions' do
+    verify(["i", "1", "2", ".", "i", "3", "4", ".", ",p"])
   end
 end
 def verify(commands)

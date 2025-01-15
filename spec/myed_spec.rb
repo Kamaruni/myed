@@ -1,6 +1,7 @@
 def myed(c)
-  buffer = c[1..-3]
-  commands = c[-1..-1]
+  dot = c.find_index(".")
+  buffer = c[1...dot]
+  commands = c[(dot + 1)..-1]
   commands.flat_map do |current_command|
     if current_command.match? /^d+$/
       jump_to_line current_command

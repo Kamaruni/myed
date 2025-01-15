@@ -1,8 +1,9 @@
 require_relative './spec_helper'
 class MyEd
-  def initialize(buffer)
+  def initialize(buffer, filename = nil)
     @buffer = buffer
     @current_line = buffer.size - 1
+    @filename = filename
   end
   def execute_command(current_command)
     if @mode == :insert
@@ -13,9 +14,16 @@ class MyEd
       self.jump_to_line(current_command)
     elsif current_command == "d"
       self.delete_line()
+    elsif current_command == "w"
+      write_file()
     else
       self.print_lines(current_command)
     end
+  end
+  def write_file()
+    output = @buffer.join("\n")
+    output += "\n" unless output.empty?
+    [File.write(@filename, output).to_s]
   end
     def execute_insert_mode_command(command)
       if command == "."

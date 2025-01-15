@@ -2,7 +2,7 @@
 require_relative '../spec/myed_spec'
 file_name = ARGV[0]
 buffer = File.readlines(file_name).map { _1.chomp }
-myed = MyEd.new(buffer)
+myed = MyEd.new(buffer, file_name)
 while (input = STDIN.gets.chomp) != 'q'
   results =  myed.execute_command(input).join("\n")
   next if results.empty?

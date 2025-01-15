@@ -1,7 +1,19 @@
+class MyEd
+  def initialize(buffer)
+    @buffer = buffer
+    @current_line = buffer.size - 1
+  end
+  def [](i)
+    @current_line
+  end
+  def []=(i, value)
+    @current_line = value
+  end
+end
 def myed(c)
   dot = c.find_index(".")
   buffer = c[1...dot]
-  current_line = [buffer.size - 1]
+  current_line = MyEd.new(buffer)
   commands = c[(dot + 1)..-1]
   commands.flat_map do |current_command|
     if current_command.match? /^\d+$/

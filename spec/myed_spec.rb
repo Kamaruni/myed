@@ -9,7 +9,7 @@ class MyEd
     if modifying?
       execute_modifying_command(current_command)
     elsif current_command == "i"
-      self.enter_insert_mode()
+      enter_modifying_mode(current_command)
     elsif current_command.match? /^\d+$/
       self.jump_to_line(current_command)
     elsif current_command == "d"
@@ -38,7 +38,7 @@ class MyEd
       end
       []
     end
-  def enter_insert_mode()
+  def enter_modifying_mode(command)
     @mode = :insert
     @insert_buffer = []
     []

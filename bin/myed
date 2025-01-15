@@ -1,7 +1,9 @@
 #!/bin/env ruby
 require_relative '../spec/myed_spec'
-myed = MyEd.new([])
-while (input = gets.chomp) != 'q'
+file_name = ARGV[0]
+buffer = File.readlines(file_name).map { _1.chomp }
+myed = MyEd.new(buffer)
+while (input = STDIN.gets.chomp) != 'q'
   results =  myed.execute_command(input).join("\n")
   next if results.empty?
   puts Array(results).join("\n")

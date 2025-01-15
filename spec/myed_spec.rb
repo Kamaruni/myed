@@ -8,7 +8,7 @@ class MyEd
   def execute_command(current_command)
     if modifying?
       execute_modifying_command(current_command)
-    elsif current_command == "i"
+    elsif current_command == "i" || current_command == "c"
       enter_modifying_mode(current_command)
     elsif current_command.match? /^\d+$/
       self.jump_to_line(current_command)
@@ -26,11 +26,16 @@ class MyEd
     [File.write(@filename, output).to_s]
   end
   def modifying?()
-    @mode == :insert
+    @mode == :insert || @mode == :change
   end
   def execute_modifying_command(command)
       if command == "."
+    if @mode == :change
+      @buffer[0] = "hi"
         @mode = :command
+      return []
+    end
+      @mode = :command
         @buffer = @buffer[0...@current_line] + @insert_buffer + (@buffer[@current_line..-1] || [])
         @current_line = @insert_buffer.size - 1 if @current_line == -1
       else
@@ -39,7 +44,12 @@ class MyEd
       []
     end
   def enter_modifying_mode(command)
-    @mode = :insert
+    @mode = case command[-1]
+            when "i"
+              :insert
+            when "c"
+              :change
+            end
     @insert_buffer = []
     []
   end
@@ -147,6 +157,9 @@ RSpec.describe 'myed' do
   end
   it 'prints contents with line numbers' do
     verify(["i", "one", "two", "three", ".", "2,$n"])
+  end
+  it 'change first line' do
+    verify(["i", "hello", "world", ".", "1", "c", "hi", ".", ",p"])
   end
 end
 def verify(commands)

@@ -6,7 +6,7 @@ class MyEd
     @filename = filename
   end
   def execute_command(current_command)
-    if @mode == :insert
+    if modifying?
       execute_insert_mode_command(current_command)
     elsif current_command == "i"
       self.enter_insert_mode()
@@ -24,6 +24,9 @@ class MyEd
     output = @buffer.join("\n")
     output += "\n" unless output.empty?
     [File.write(@filename, output).to_s]
+  end
+  def modifying?()
+    @mode == :insert
   end
     def execute_insert_mode_command(command)
       if command == "."

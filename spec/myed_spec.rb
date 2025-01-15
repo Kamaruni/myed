@@ -51,7 +51,6 @@ class MyEd
     []
   end
   def print_lines(command)
-      with_line_numbers = command[-1] == "n"
       address = parse_address(command[0...-1], @current_line)
       if command[-1] == "n"
         @buffer[address].each_with_index.map { |line, index| "#{index + address.first + 1}\t#{line}" }

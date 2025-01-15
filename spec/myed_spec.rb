@@ -1,3 +1,4 @@
+require_relative './spec_helper'
 class MyEd
   def initialize(buffer)
     @buffer = buffer

@@ -1,0 +1,8 @@
+#!/bin/env ruby
+require_relative '../spec/myed_spec'
+myed = MyEd.new([])
+while (input = gets.chomp) != 'q'
+  results =  myed.execute_command(input).join("\n")
+  next if results.empty?
+  puts Array(results).join("\n")
+end

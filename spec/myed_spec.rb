@@ -3,12 +3,6 @@ class MyEd
     @buffer = buffer
     @current_line = buffer.size - 1
   end
-  def [](i)
-    @current_line
-  end
-  def []=(i, value)
-    @current_line = value
-  end
   def jump_to_line(command)
     line_number = command.to_i() - 1
     @current_line = line_number

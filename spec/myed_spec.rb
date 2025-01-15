@@ -1,37 +1,41 @@
 def myed(c)
   dot = c.find_index(".")
   buffer = c[1...dot]
+  current_line = [buffer.size - 1]
   commands = c[(dot + 1)..-1]
   commands.flat_map do |current_command|
     if current_command.match? /^\d+$/
-      jump_to_line(current_command, buffer)
+      jump_to_line(current_command, buffer, current_line)
     elsif current_command == "d"
-      delete_line(buffer)
+      delete_line(buffer, current_line)
     else
-      print_lines(current_command, buffer)
+      print_lines(current_command, buffer, current_line)
     end
   end
 end
-def delete_line(buffer)
-  buffer.delete_at(1)
+def delete_line(buffer, current_line)
+  buffer.delete_at(current_line[0])
+  current_line[0] = [buffer.size - 1, current_line[0]].min
   []
 end
-def jump_to_line(command, buffer)
+def jump_to_line(command, buffer, current_line)
   line_number = command.to_i() - 1
+  current_line[0] = line_number
   buffer[line_number..line_number]
 end
-def print_lines(command, buffer)
-    buffer[parse_address(command[0...-1])]
+def print_lines(command, buffer, current_line)
+    buffer[parse_address(command[0...-1], current_line)]
 end
-def parse_address(range)
+def parse_address(range, current_line)
   return 0..-1 if range == ","
+  return (current_line[0]..current_line[0]) if range == ""
   address_start, address_end = range.split(",")
   address_start = [1, address_start.to_i].max
   address_end ||= address_start
   (address_start.to_i() -1)..(address_end.to_i() -1)
 end
 RSpec.describe 'myed' do
-  xit 'jumps to line 2' do
+  it 'jumps to line 2' do
     verify(["i", "a", "b", ".", "2"])
   end
   it 'inserting hello' do
@@ -83,8 +87,11 @@ RSpec.describe 'myed' do
   it 'prints current line twice' do
     verify(["i", "hello", ".", "p", "p"])
   end
-  it 'prints current line twice' do
+  it 'deletes the current line' do
     verify(["i", "one", "two", ".", "d", "p"])
+  end
+  it 'jumps to first line and deletes it' do
+    verify(["i", "one", "two", ".", "1", "d", "1p"])
   end
 end
 def verify(commands)

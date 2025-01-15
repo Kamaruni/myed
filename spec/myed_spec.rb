@@ -9,6 +9,11 @@ class MyEd
   def []=(i, value)
     @current_line = value
   end
+  def jump_to_line(command)
+    line_number = command.to_i() - 1
+    @current_line = line_number
+    @buffer[line_number..line_number]
+  end
 end
 def myed(c)
   dot = c.find_index(".")
@@ -17,7 +22,7 @@ def myed(c)
   commands = c[(dot + 1)..-1]
   commands.flat_map do |current_command|
     if current_command.match? /^\d+$/
-      jump_to_line(current_command, buffer, current_line)
+      current_line.jump_to_line(current_command)
     elsif current_command == "d"
       delete_line(buffer, current_line)
     else

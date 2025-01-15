@@ -5,14 +5,7 @@ class MyEd
   end
   def execute_command(current_command)
     if @mode == :insert
-      if current_command == "."
-        @mode = :command
-        @buffer = @buffer[0...@current_line] + @insert_buffer + (@buffer[@current_line..-1] || [])
-        @current_line = @insert_buffer.size - 1 if @current_line == -1
-      else
-        @insert_buffer.append(current_command)
-      end
-      []
+      execute_insert_mode_command(current_command)
     elsif current_command == "i"
       self.enter_insert_mode()
     elsif current_command.match? /^\d+$/
@@ -23,6 +16,16 @@ class MyEd
       self.print_lines(current_command)
     end
   end
+    def execute_insert_mode_command(command)
+      if command == "."
+        @mode = :command
+        @buffer = @buffer[0...@current_line] + @insert_buffer + (@buffer[@current_line..-1] || [])
+        @current_line = @insert_buffer.size - 1 if @current_line == -1
+      else
+        @insert_buffer.append(command)
+      end
+      []
+    end
   def enter_insert_mode()
     @mode = :insert
     @insert_buffer = []

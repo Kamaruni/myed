@@ -1,11 +1,12 @@
 def myed(c)
   buffer = c[1..-3]
   commands = c[-1..-1]
-  current_command = commands[0]
-  if current_command.match? /^d+$/
-    jump_to_line current_command
-  else
-    print_lines(current_command, buffer)
+  commands.flat_map do |current_command|
+    if current_command.match? /^d+$/
+      jump_to_line current_command
+    else
+      print_lines(current_command, buffer)
+    end
   end
 end
 def jump_to_line(command, buffer)

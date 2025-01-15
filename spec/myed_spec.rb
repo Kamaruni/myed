@@ -20,7 +20,7 @@ class MyEd
     []
   end
   def print_lines(command)
-      @buffer[parse_address(command[0...-1], self)]
+      @buffer[parse_address(command[0...-1], @current_line)]
   end
 end
 def myed(c)
@@ -40,7 +40,7 @@ def myed(c)
 end
 def parse_address(range, current_line)
   return 0..-1 if range == ","
-  return (current_line[0]..current_line[0]) if range == ""
+  return (current_line..current_line) if range == ""
   address_start, address_end = range.split(",")
   address_start = [1, address_start.to_i].max
   address_end ||= address_start

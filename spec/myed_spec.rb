@@ -51,7 +51,13 @@ class MyEd
     []
   end
   def print_lines(command)
-      @buffer[parse_address(command[0...-1], @current_line)]
+      with_line_numbers = command[-1] == "n"
+      address = parse_address(command[0...-1], @current_line)
+      if command[-1] == "n"
+        @buffer[address].each_with_index.map { |line, index| "#{index + address.first + 1}\t#{line}" }
+      else
+        @buffer[address]
+      end
   end
 end
 def myed(commands)
@@ -136,6 +142,9 @@ RSpec.describe 'myed' do
   end
   it 'inserts multiple lines in two separate insert sessions' do
     verify(["i", "1", "2", ".", "i", "3", "4", ".", ",p"])
+  end
+  it 'prints contents with line numbers' do
+    verify(["i", "one", "two", "three", ".", "2,$n"])
   end
 end
 def verify(commands)

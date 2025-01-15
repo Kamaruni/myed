@@ -18,15 +18,15 @@ end
 def myed(c)
   dot = c.find_index(".")
   buffer = c[1...dot]
-  current_line = MyEd.new(buffer)
+  myed = MyEd.new(buffer)
   commands = c[(dot + 1)..-1]
   commands.flat_map do |current_command|
     if current_command.match? /^\d+$/
-      current_line.jump_to_line(current_command)
+      myed.jump_to_line(current_command)
     elsif current_command == "d"
-      delete_line(buffer, current_line)
+      delete_line(buffer, myed)
     else
-      print_lines(current_command, buffer, current_line)
+      print_lines(current_command, buffer, myed)
     end
   end
 end

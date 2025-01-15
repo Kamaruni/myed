@@ -7,7 +7,7 @@ class MyEd
   end
   def execute_command(current_command)
     if modifying?
-      execute_insert_mode_command(current_command)
+      execute_modifying_command(current_command)
     elsif current_command == "i"
       self.enter_insert_mode()
     elsif current_command.match? /^\d+$/
@@ -28,7 +28,7 @@ class MyEd
   def modifying?()
     @mode == :insert
   end
-    def execute_insert_mode_command(command)
+  def execute_modifying_command(command)
       if command == "."
         @mode = :command
         @buffer = @buffer[0...@current_line] + @insert_buffer + (@buffer[@current_line..-1] || [])

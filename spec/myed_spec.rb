@@ -14,6 +14,11 @@ class MyEd
     @current_line = line_number
     @buffer[line_number..line_number]
   end
+  def delete_line()
+    @buffer.delete_at(@current_line)
+    @current_line = [@buffer.size - 1, @current_line].min
+    []
+  end
 end
 def myed(c)
   dot = c.find_index(".")
@@ -24,7 +29,7 @@ def myed(c)
     if current_command.match? /^\d+$/
       myed.jump_to_line(current_command)
     elsif current_command == "d"
-      delete_line(buffer, myed)
+      myed.delete_line()
     else
       print_lines(current_command, buffer, myed)
     end

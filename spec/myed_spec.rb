@@ -19,6 +19,9 @@ class MyEd
     @current_line = [@buffer.size - 1, @current_line].min
     []
   end
+  def print_lines(command)
+      @buffer[parse_address(command[0...-1], self)]
+  end
 end
 def myed(c)
   dot = c.find_index(".")
@@ -31,12 +34,9 @@ def myed(c)
     elsif current_command == "d"
       myed.delete_line()
     else
-      print_lines(current_command, buffer, myed)
+      myed.print_lines(current_command)
     end
   end
-end
-def print_lines(command, buffer, current_line)
-    buffer[parse_address(command[0...-1], current_line)]
 end
 def parse_address(range, current_line)
   return 0..-1 if range == ","

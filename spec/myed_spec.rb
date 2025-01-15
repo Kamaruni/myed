@@ -3,6 +3,15 @@ class MyEd
     @buffer = buffer
     @current_line = buffer.size - 1
   end
+  def execute_command(current_command)
+    if current_command.match? /^\d+$/
+      self.jump_to_line(current_command)
+    elsif current_command == "d"
+      self.delete_line()
+    else
+      self.print_lines(current_command)
+    end
+  end
   def jump_to_line(command)
     line_number = command.to_i() - 1
     @current_line = line_number
@@ -23,13 +32,7 @@ def myed(c)
   myed = MyEd.new(buffer)
   commands = c[(dot + 1)..-1]
   commands.flat_map do |current_command|
-    if current_command.match? /^\d+$/
-      myed.jump_to_line(current_command)
-    elsif current_command == "d"
-      myed.delete_line()
-    else
-      myed.print_lines(current_command)
-    end
+    myed.execute_command(current_command)
   end
 end
 def parse_address(range, current_line)

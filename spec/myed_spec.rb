@@ -3,12 +3,18 @@ def myed(c)
   buffer = c[1...dot]
   commands = c[(dot + 1)..-1]
   commands.flat_map do |current_command|
-    if current_command.match? /^d+$/
-      jump_to_line current_command
+    if current_command.match? /^\d+$/
+      jump_to_line(current_command, buffer)
+    elsif current_command == "d"
+      delete_line(buffer)
     else
       print_lines(current_command, buffer)
     end
   end
+end
+def delete_line(buffer)
+  buffer.delete_at(1)
+  []
 end
 def jump_to_line(command, buffer)
   line_number = command.to_i() - 1
@@ -76,6 +82,9 @@ RSpec.describe 'myed' do
   end
   it 'prints current line twice' do
     verify(["i", "hello", ".", "p", "p"])
+  end
+  it 'prints current line twice' do
+    verify(["i", "one", "two", ".", "d", "p"])
   end
 end
 def verify(commands)

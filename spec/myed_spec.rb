@@ -167,6 +167,9 @@ RSpec.describe 'myed' do
   it 'changes two lines' do
     verify(["i", "hello", "world", "!", ".", "2", "c", "Steve", "Stevenson", ".", ",n"])
   end
+  it 'deletes line when change is empty' do
+    verify(["i", "one", "two", ".", "1", "c", ".", ",p"])
+  end
 end
 def verify(commands)
   expect(myed(commands)).to eq(call_ed(commands))

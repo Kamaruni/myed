@@ -8,7 +8,7 @@ class MyEd
   def execute_command(current_command)
     if modifying?
       execute_modifying_command(current_command)
-    elsif current_command == "i" || current_command == "c"
+    elsif current_command == "i" || current_command == "c" || current_command == "a"
       enter_modifying_mode(current_command)
     elsif current_command.match? /^\d+$/
       self.jump_to_line(current_command)
@@ -26,10 +26,15 @@ class MyEd
     [File.write(@filename, output).to_s]
   end
   def modifying?()
-    @mode == :insert || @mode == :change
+    @mode == :insert || @mode == :change || @mode == :append
   end
   def execute_modifying_command(command)
       if command == "."
+    if @mode == :append
+      @buffer = @buffer[0..@current_line] + @modifying_buffer
+      @mode = :command
+      return []
+    end
     if @mode == :change
       @buffer = @buffer[0...@current_line] + @modifying_buffer + (@buffer[(@current_line + 1)..-1] || [])
       @mode = :command
@@ -49,6 +54,8 @@ class MyEd
               :insert
             when "c"
               :change
+            when "a"
+              :append
             end
     @modifying_buffer = []
     []
@@ -169,6 +176,12 @@ RSpec.describe 'myed' do
   end
   it 'deletes line when change is empty' do
     verify(["i", "one", "two", ".", "1", "c", ".", ",p"])
+  end
+  it 'appends a line to an empty document' do
+    verify(["a", "hello", ".", ",p"])
+  end
+  it 'appends a line at the end' do
+    verify(["i", "a", "b", ".", "a", "c", ".", ",p"])
   end
 end
 def verify(commands)

@@ -31,7 +31,7 @@ class MyEd
   def execute_modifying_command(command)
       if command == "."
     if @mode == :append
-      @buffer = @buffer[0..@current_line] + @modifying_buffer
+      @buffer = @buffer[0..@current_line] + @modifying_buffer + (@buffer[(@current_line + 1)..-1] || [])
       @mode = :command
       return []
     end
@@ -182,6 +182,9 @@ RSpec.describe 'myed' do
   end
   it 'appends a line at the end' do
     verify(["i", "a", "b", ".", "a", "c", ".", ",p"])
+  end
+  it 'appends after the first of two lines' do
+    verify(["i", "one", "two", ".", "1", "a", "one and a half", ".", ",p"])
   end
 end
 def verify(commands)

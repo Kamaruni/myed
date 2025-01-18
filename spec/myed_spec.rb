@@ -12,8 +12,8 @@ class MyEd
       enter_modifying_mode(current_command)
     elsif current_command.match? /^\d+$/
       self.jump_to_line(current_command)
-    elsif current_command == "d"
-      self.delete_line()
+    elsif current_command.end_with?("d")
+      delete_line(current_command)
     elsif current_command == "w"
       write_file()
     else
@@ -65,8 +65,9 @@ class MyEd
     @current_line = line_number
     @buffer[line_number..line_number]
   end
-  def delete_line()
-    @buffer.delete_at(@current_line)
+  def delete_line(command)
+    address = parse_address(command[0...-1], @current_line)
+    @buffer = @buffer[0...address.first] + @buffer[(address.last + 1)..-1]
     @current_line = [@buffer.size - 1, @current_line].min
     []
   end
@@ -185,6 +186,9 @@ RSpec.describe 'myed' do
   end
   it 'appends after the first of two lines' do
     verify(["i", "one", "two", ".", "1", "a", "one and a half", ".", ",p"])
+  end
+  it 'deletes two lines' do
+    verify(["i", "one", "two", "three", ".", "1,2d", ",p"])
   end
 end
 def verify(commands)
